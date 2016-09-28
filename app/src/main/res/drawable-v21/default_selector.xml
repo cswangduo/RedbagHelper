@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="#bbd4bc">
+    <selector>
+        <item
+            android:drawable="@color/rbh_color3"
+            android:state_pressed="true" />
+
+        <item android:drawable="@color/rbh_color4" />
+    </selector>
+</ripple>

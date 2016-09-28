@@ -1,0 +1,63 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.2"
+
+    defaultConfig {
+        applicationId "com.huaihuai.android.rb"
+        minSdkVersion 18
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        config_release {
+            keyAlias 'releaseKey'
+            keyPassword '123456'
+            storeFile file('key/releaseKey.jks')
+            storePassword '123456'
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.config_release
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            applicationVariants.all {
+                variant ->
+                    variant.outputs.each {
+                        output ->
+                            def outputFile = output.outputFile
+                            if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                                def fileName = outputFile.name
+                                        .replace("app", "rb")
+                                        .replace("-release", "")
+                                        .replace(".apk", "-${defaultConfig.versionName}.apk")
+                                output.outputFile = new File(outputFile.parent, fileName)
+                            }
+                    }
+            }
+        }
+    }
+
+    productFlavors {
+    }
+
+}
+
+apply plugin: 'com.neenbedankt.android-apt'
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile rootProject.ext.dependencies["logger"]
+    compile rootProject.ext.dependencies["appcompat-v7"]
+    compile rootProject.ext.dependencies["design"]
+    compile rootProject.ext.dependencies["cardview"]
+    compile rootProject.ext.dependencies["butterknife"]
+    apt rootProject.ext.dependencies["butterknife-compiler"]
+}
